@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biancheria — Moio Group</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F5F2EC; --bg2: #EEEBE3; --bg3: #E5E1D7; --card: #FFFFFF;
+    --border: #D8D3C8; --text: #1A1713; --text2: #6B6459; --text3: #9C9183;
+    --green: #2A6B47; --green-bg: #EAF3EE; --red: #A32D2D; --red-bg: #FCEBEB;
+    --amber: #7A4F0C; --amber-bg: #FDF3E3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  header { background: var(--text); color: var(--bg); padding: 18px 32px; display: flex; align-items: center; justify-content: space-between; }
+  header .brand { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500; opacity: 0.5; }
+  header h1 { font-size: 17px; font-weight: 600; }
+  .save-status { font-family: 'DM Mono', monospace; font-size: 11px; opacity: 0.4; transition: all 0.3s; }
+  .save-status.active { opacity: 1; color: #7ECBA1; }
+  .save-status.error { opacity: 1; color: #FF7070; }
+  .apt-nav { display: flex; border-bottom: 1.5px solid var(--border); background: var(--card); padding: 0 32px; }
+  .apt-tab { padding: 14px 24px; font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; border: none; background: transparent; color: var(--text3); border-bottom: 2px solid transparent; margin-bottom: -1.5px; transition: all 0.15s; }
+  .apt-tab:hover { color: var(--text); }
+  .apt-tab.active { color: var(--text); border-bottom-color: var(--text); }
+  main { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+  .section-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text3); margin-bottom: 14px; }
+  .inventory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-bottom: 32px; }
+  .item-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
+  .item-card.low { background: var(--red-bg); border-color: #E5A0A0; }
+  .item-label { font-size: 11px; color: var(--text2); margin-bottom: 6px; line-height: 1.3; }
+  .item-qty { font-family: 'DM Mono', monospace; font-size: 32px; font-weight: 500; line-height: 1; }
+  .item-card.low .item-qty { color: var(--red); }
+  .item-card:not(.low) .item-qty { color: var(--green); }
+  .refill-tag { display: inline-block; background: var(--amber-bg); color: var(--amber); font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 4px; margin-top: 5px; }
+  .item-btns { display: flex; gap: 6px; margin-top: 10px; }
+  .qty-btn { flex: 1; height: 28px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg2); cursor: pointer; font-size: 15px; color: var(--text); transition: background 0.1s; }
+  .qty-btn:hover { background: var(--bg3); }
+  .checkin-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 32px; }
+  .checkin-top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+  .checkin-box h3 { font-size: 13px; font-weight: 600; }
+  .num-input { width: 72px; padding: 8px 10px; font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 500; text-align: center; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); }
+  .calc-btn { padding: 9px 22px; border: 1px solid var(--text); border-radius: 8px; background: var(--text); color: var(--bg); cursor: pointer; font-size: 13px; font-weight: 500; font-family: 'DM Sans', sans-serif; transition: opacity 0.15s; }
+  .calc-btn:hover { opacity: 0.82; }
+  .rec-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+  .rec-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 8px; margin-bottom: 18px; }
+  .rec-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--green-bg); border: 1px solid #C0DDD0; border-radius: 8px; padding: 9px 12px; }
+  .rec-item-label { font-size: 12px; color: var(--text2); flex: 1; }
+  .rec-input { width: 50px; padding: 4px 6px; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; text-align: center; border: 1px solid #C0DDD0; border-radius: 6px; background: #fff; color: var(--text); }
+  .preview { background: var(--bg2); border-radius: 8px; padding: 14px 16px; margin-bottom: 14px; display: none; }
+  .preview.show { display: block; }
+  .preview-info { font-size: 12px; color: var(--text2); margin-bottom: 10px; }
+  .preview-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .preview-row:last-child { border-bottom: none; }
+  .preview-row .lbl { color: var(--text2); }
+  .preview-row .val { font-family: 'DM Mono', monospace; font-weight: 500; color: var(--text); }
+  .rec-note { color: var(--green); font-size: 11px; margin: 0 4px; }
+  .warn-note { color: var(--red); font-size: 11px; margin-left: 4px; }
+  .confirm-btn { padding: 10px 22px; background: var(--green); color: #fff; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
+  .confirm-btn:hover { background: #1D5236; }
+  .log-box { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .log-reset { font-size: 12px; color: var(--text3); cursor: pointer; text-decoration: underline; }
+  .log-empty { font-size: 12px; color: var(--text3); }
+  .log-entry { padding: 9px 0; border-bottom: 1px solid var(--border); }
+  .log-entry:last-child { border-bottom: none; }
+  .log-ts { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text2); margin-bottom: 3px; }
+  .log-det { font-size: 12px; color: var(--text2); }
+  .log-rec { font-size: 12px; color: var(--green); }
+  .apt-panel { display: none; }
+  .apt-panel.active { display: block; }
+  .loading-overlay { position: fixed; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; font-family: 'DM Mono', monospace; font-size: 13px; color: var(--text3); z-index: 999; transition: opacity 0.3s; }
+  .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loading">Connessione al database...</div>
+
+<header>
+  <div>
+    <div class="brand">Moio Group</div>
+    <h1>Gestione Biancheria</h1>
+  </div>
+  <div class="save-status" id="save-status">● live</div>
+</header>
+
+<div class="apt-nav">
+  <button class="apt-tab active" onclick="switchApt('cozy')">Cozy Apartment</button>
+  <button class="apt-tab" onclick="switchApt('residence')">Cozy Residence</button>
+</div>
+
+<main>
+  <div class="apt-panel active" id="panel-cozy">
+    <div class="section-label">Inventario Armadio</div>
+    <div class="inventory-grid" id="grid-cozy"></div>
+    <div class="checkin-box">
+      <div class="checkin-top">
+        <h3>Check-in ospiti</h3>
+        <input type="number" class="num-input" id="persons-cozy" min="1" max="20" value="2" oninput="buildPreview('cozy')">
+        <button class="calc-btn" onclick="togglePreview('cozy')">Calcola consumo</button>
+      </div>
+      <div class="rec-label">↩ Biancheria recuperata — non verrà sottratta</div>
+      <div class="rec-grid" id="recovery-cozy"></div>
+      <div class="preview" id="preview-cozy">
+        <div id="preview-rows-cozy"></div>
+        <button class="confirm-btn" onclick="applyCheckin('cozy')">✓ Conferma check-in</button>
+      </div>
+    </div>
+    <div class="log-box">
+      <div class="log-header">
+        <div class="section-label" style="margin:0">Registro movimenti</div>
+        <span class="log-reset" onclick="resetLog('cozy')">svuota registro</span>
+      </div>
+      <div id="log-cozy"><p class="log-empty">Nessun movimento registrato.</p></div>
+    </div>
+  </div>
+
+  <div class="apt-panel" id="panel-residence">
+    <div class="section-label">Inventario Armadio</div>
+    <div class="inventory-grid" id="grid-residence"></div>
+    <div class="checkin-box">
+      <div class="checkin-top">
+        <h3>Check-in ospiti</h3>
+        <input type="number" class="num-input" id="persons-residence" min="1" max="20" value="2" oninput="buildPreview('residence')">
+        <button class="calc-btn" onclick="togglePreview('residence')">Calcola consumo</button>
+      </div>
+      <div class="rec-label">↩ Biancheria recuperata — non verrà sottratta</div>
+      <div class="rec-grid" id="recovery-residence"></div>
+      <div class="preview" id="preview-residence">
+        <div id="preview-rows-residence"></div>
+        <button class="confirm-btn" onclick="applyCheckin('residence')">✓ Conferma check-in</button>
+      </div>
+    </div>
+    <div class="log-box">
+      <div class="log-header">
+        <div class="section-label" style="margin:0">Registro movimenti</div>
+        <span class="log-reset" onclick="resetLog('residence')">svuota registro</span>
+      </div>
+      <div id="log-residence"><p class="log-empty">Nessun movimento registrato.</p></div>
+    </div>
+  </div>
+</main>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDMt9qae0EynpYNIuEU-9mkKk1cW4a89G4",
+  authDomain: "biancheria-via-aquila.firebaseapp.com",
+  databaseURL: "https://biancheria-via-aquila-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "biancheria-via-aquila",
+  storageBucket: "biancheria-via-aquila.firebasestorage.app",
+  messagingSenderId: "823349167544",
+  appId: "1:823349167544:web:7b8980ba69b77b67fabb4d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+const ITEMS = [
+  { key: 'lenzuola_matrimoniali', label: 'Lenzuola matrimoniali', low: 4 },
+  { key: 'lenzuola_singole',      label: 'Lenzuola singole',      low: 3 },
+  { key: 'federe',                label: 'Federe',                low: 5 },
+  { key: 'teli_grandi',           label: 'Teli grandi',           low: 5 },
+  { key: 'teli_medi',             label: 'Teli medi',             low: 5 },
+  { key: 'teli_piccoli',          label: 'Teli piccoli',          low: 5 },
+];
+
+// Valori di default — se Firebase è vuoto parte da questi
+const DEFAULTS = {
+  cozy:      { lenzuola_matrimoniali:0,  lenzuola_singole:0, federe:0,  teli_grandi:0,  teli_medi:0,  teli_piccoli:0,  log:[] },
+  residence: { lenzuola_matrimoniali:12, lenzuola_singole:7, federe:21, teli_grandi:16, teli_medi:16, teli_piccoli:16, log:[] }
+};
+
+let state = {
+  cozy:      JSON.parse(JSON.stringify(DEFAULTS.cozy)),
+  residence: JSON.parse(JSON.stringify(DEFAULTS.residence))
+};
+let previewOpen = { cozy: false, residence: false };
+let initialized = { cozy: false, residence: false };
+
+function setSaveStatus(msg, type) {
+  const el = document.getElementById('save-status');
+  el.textContent = msg;
+  el.className = 'save-status' + (type ? ' ' + type : '');
+  if (type === 'active') setTimeout(() => { el.textContent = '● live'; el.className = 'save-status'; }, 2500);
+}
+
+async function saveApt(apt) {
+  setSaveStatus('Salvataggio...', '');
+  try {
+    await set(ref(db, 'biancheria/' + apt), state[apt]);
+    setSaveStatus('✓ Salvato', 'active');
+  } catch(e) {
+    setSaveStatus('⚠ Errore', 'error');
+  }
+}
+
+// Ascolta in tempo reale — se il nodo non esiste su Firebase, usa i defaults e li salva
+['cozy', 'residence'].forEach(apt => {
+  onValue(ref(db, 'biancheria/' + apt), (snapshot) => {
+    const data = snapshot.val();
+    if (data) {
+      // Assicura che tutte le chiavi esistano (retrocompatibilità)
+      ITEMS.forEach(item => { if (data[item.key] === undefined) data[item.key] = 0; });
+      if (!data.log) data.log = [];
+      state[apt] = data;
+    } else if (!initialized[apt]) {
+      // Prima volta: nodo vuoto su Firebase → salva i defaults
+      saveApt(apt);
+    }
+    initialized[apt] = true;
+    renderGrid(apt);
+    renderLog(apt);
+
+    // Nascondi loading quando entrambi sono pronti
+    if (initialized.cozy && initialized.residence) {
+      document.getElementById('loading').classList.add('hidden');
+    }
+  });
+});
+
+function calcConsumption(persons) {
+  const lm = Math.floor(persons/2), ls = persons%2;
+  return { lenzuola_matrimoniali:lm*2, lenzuola_singole:ls*2, federe:persons, teli_grandi:persons, teli_medi:persons, teli_piccoli:persons };
+}
+
+function getRecovery(apt) {
+  const r = {};
+  ITEMS.forEach(item => { const el = document.getElementById('rec-'+apt+'-'+item.key); r[item.key] = el?(parseInt(el.value)||0):0; });
+  return r;
+}
+
+function renderGrid(apt) {
+  const g = document.getElementById('grid-'+apt); g.innerHTML = '';
+  ITEMS.forEach(item => {
+    const qty = state[apt][item.key] || 0, isLow = qty <= item.low;
+    const c = document.createElement('div'); c.className = 'item-card'+(isLow?' low':'');
+    c.innerHTML = `<div class="item-label">${item.label}</div>
+      <div class="item-qty">${qty}</div>
+      ${isLow?'<div class="refill-tag">⚠ refill</div>':''}
+      <div class="item-btns">
+        <button class="qty-btn" onclick="window.adjustQty('${apt}','${item.key}',-1)">−</button>
+        <button class="qty-btn" onclick="window.adjustQty('${apt}','${item.key}',1)">+</button>
+      </div>`;
+    g.appendChild(c);
+  });
+}
+
+function renderRecovery(apt) {
+  const g = document.getElementById('recovery-'+apt); g.innerHTML = '';
+  ITEMS.forEach(item => {
+    const d = document.createElement('div'); d.className = 'rec-item';
+    d.innerHTML = `<span class="rec-item-label">${item.label}</span>
+      <input type="number" class="rec-input" id="rec-${apt}-${item.key}" min="0" max="50" value="0" oninput="window.buildPreview('${apt}')">`;
+    g.appendChild(d);
+  });
+}
+
+function renderLog(apt) {
+  const el = document.getElementById('log-'+apt);
+  const log = state[apt].log;
+  if (!log || !log.length) { el.innerHTML='<p class="log-empty">Nessun movimento registrato.</p>'; return; }
+  el.innerHTML = log.map(e => {
+    const rec = e.recovery&&e.recovery.length?`<div class="log-rec">↩ ${e.recovery.join(', ')}</div>`:'';
+    const det = e.details&&e.details.length?`<div class="log-det">${e.details.join(', ')}</div>`:'';
+    return `<div class="log-entry"><div class="log-ts">${e.ts} — ${e.persons} ospiti</div>${det}${rec}</div>`;
+  }).join('');
+}
+
+window.adjustQty = function(apt, key, delta) {
+  state[apt][key] = Math.max(0, (state[apt][key]||0) + delta);
+  renderGrid(apt);
+  if (previewOpen[apt]) window.buildPreview(apt);
+  saveApt(apt);
+};
+
+window.switchApt = function(apt) {
+  document.querySelectorAll('.apt-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.apt-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-'+apt).classList.add('active');
+  document.querySelectorAll('.apt-tab')[apt==='cozy'?0:1].classList.add('active');
+};
+
+window.togglePreview = function(apt) {
+  previewOpen[apt] = !previewOpen[apt];
+  const box = document.getElementById('preview-'+apt);
+  if (previewOpen[apt]) { window.buildPreview(apt); box.classList.add('show'); } else { box.classList.remove('show'); }
+};
+
+window.buildPreview = function(apt) {
+  if (!previewOpen[apt]) return;
+  const persons = parseInt(document.getElementById('persons-'+apt).value)||0;
+  const C = calcConsumption(persons), R = getRecovery(apt);
+  const lm = Math.floor(persons/2), ls = persons%2;
+  let html = `<div class="preview-info">${persons} ospiti → ${lm} letto/i matrimoniale/i${ls?', 1 letto singolo':''}</div>`;
+  ITEMS.forEach(item => {
+    const uso=C[item.key], rec=Math.min(R[item.key],uso), netto=uso-rec;
+    const dopo=(state[apt][item.key]||0)-netto;
+    const warn=dopo<0?'<span class="warn-note">⚠ non sufficienti</span>':'';
+    const recNote=rec>0?`<span class="rec-note">(+${rec} rec.)</span>`:'';
+    html+=`<div class="preview-row"><span class="lbl">${item.label}</span><span class="val">−${netto} ${recNote}→ <strong>${Math.max(0,dopo)}</strong> ${warn}</span></div>`;
+  });
+  document.getElementById('preview-rows-'+apt).innerHTML = html;
+};
+
+window.applyCheckin = function(apt) {
+  const persons = parseInt(document.getElementById('persons-'+apt).value)||0;
+  if (!persons) return;
+  const C=calcConsumption(persons), R=getRecovery(apt);
+  const logDetails=[], logRecovery=[];
+  ITEMS.forEach(item => {
+    const uso=C[item.key], rec=Math.min(R[item.key],uso), netto=uso-rec;
+    if (netto>0) { state[apt][item.key]=Math.max(0,(state[apt][item.key]||0)-netto); logDetails.push(`${item.label}: −${netto}`); }
+    if (rec>0) logRecovery.push(`${item.label}: ${rec}`);
+  });
+  ITEMS.forEach(item => { const el=document.getElementById('rec-'+apt+'-'+item.key); if(el) el.value=0; });
+  const now=new Date();
+  const ts=now.toLocaleDateString('it-IT')+' '+now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+  if (!state[apt].log) state[apt].log=[];
+  state[apt].log.unshift({ts, persons, details:logDetails, recovery:logRecovery});
+  renderGrid(apt); renderLog(apt);
+  previewOpen[apt]=false; document.getElementById('preview-'+apt).classList.remove('show');
+  saveApt(apt);
+};
+
+window.resetLog = function(apt) {
+  if (!confirm('Svuotare il registro di '+(apt==='cozy'?'Cozy Apartment':'Cozy Residence')+'?')) return;
+  state[apt].log=[]; renderLog(apt); saveApt(apt);
+};
+
+// Init recovery grids subito
+['cozy','residence'].forEach(apt => renderRecovery(apt));
+</script>
+</body>
+</html>
