@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Biancheria — Moio Group</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -11,75 +11,105 @@
     --text:#fff; --text2:#999; --text3:#555;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-  header{background:#000;border-bottom:1px solid #1a1a1a;padding:28px 32px 24px;display:flex;flex-direction:column;align-items:center;position:relative;}
-  header img.logo{height:130px;width:auto;display:block;}
-  .save-status{position:absolute;right:28px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:11px;color:#555;transition:all .3s;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+
+  header{background:#000;border-bottom:1px solid #1a1a1a;padding:20px 16px;display:flex;flex-direction:column;align-items:center;position:relative;}
+  header img.logo{height:110px;width:auto;display:block;}
+  .save-status{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:10px;color:#555;transition:all .3s;}
   .save-status.active{color:#4ade80;}
   .save-status.error{color:#f87171;}
-  .apt-nav{display:flex;justify-content:center;border-bottom:1px solid #2a2a2a;background:#000;padding:0;}
-  .apt-tab{padding:15px 40px;font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;border:none;background:transparent;color:#555;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
+
+  .apt-nav{display:flex;justify-content:center;border-bottom:1px solid #2a2a2a;background:#000;}
+  .apt-tab{flex:1;max-width:200px;padding:14px 16px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;border:none;background:transparent;color:#555;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;text-align:center;}
   .apt-tab:hover{color:#fff;}
   .apt-tab.active{color:#fff;border-bottom-color:#fff;}
-  main{max-width:1000px;margin:0 auto;padding:36px 24px;}
-  .section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#555;margin-bottom:16px;}
-  .inventory-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:36px;}
-  @media(max-width:600px){.inventory-grid{grid-template-columns:repeat(2,1fr);}}
-  .item-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+
+  main{max-width:100%;padding:24px 14px;}
+
+  .section-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#555;margin-bottom:14px;}
+
+  .inventory-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:28px;}
+  @media(min-width:640px){.inventory-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(min-width:900px){.inventory-grid{max-width:1000px;margin-left:auto;margin-right:auto;}}
+
+  .item-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;}
   .item-card.low{background:#7f1d1d;border-color:#991b1b;}
-  .item-label{font-size:11px;color:#555;margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase;}
+  .item-label{font-size:10px;color:#555;margin-bottom:8px;letter-spacing:.05em;text-transform:uppercase;line-height:1.3;}
   .item-card.low .item-label{color:rgba(255,255,255,.5);}
-  .item-qty{font-family:'DM Mono',monospace;font-size:44px;font-weight:500;line-height:1;color:#fff;margin-bottom:6px;}
-  .refill-tag{display:inline-block;background:rgba(0,0,0,.4);color:#fbbf24;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;margin-bottom:10px;letter-spacing:.04em;}
-  .spacer{height:26px;display:block;}
-  .item-controls{display:flex;gap:6px;margin-top:10px;}
-  .qty-btn{width:32px;height:32px;border:1px solid rgba(255,255,255,.2);border-radius:6px;background:rgba(255,255,255,.08);cursor:pointer;font-size:18px;color:#fff;transition:background .1s;flex-shrink:0;}
-  .qty-btn:hover{background:rgba(255,255,255,.18);}
-  .add-row{display:flex;gap:6px;margin-top:10px;}
-  .add-input{flex:1;min-width:0;padding:7px 8px;font-family:'DM Mono',monospace;font-size:13px;text-align:center;border:1px solid rgba(255,255,255,.15);border-radius:6px;background:rgba(255,255,255,.06);color:#fff;}
-  .add-input::placeholder{color:rgba(255,255,255,.25);font-size:11px;}
-  .add-btn{padding:7px 10px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;transition:background .15s;}
-  .add-btn:hover{background:rgba(255,255,255,.28);}
-  .checkin-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:36px;}
-  .checkin-header{margin-bottom:20px;}
-  .checkin-header h3{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#555;margin-bottom:16px;}
-  .checkin-top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  .item-qty{font-family:'DM Mono',monospace;font-size:38px;font-weight:500;line-height:1;color:#fff;margin-bottom:4px;}
+  .refill-tag{display:inline-block;background:rgba(0,0,0,.4);color:#fbbf24;font-size:9px;font-weight:600;padding:2px 7px;border-radius:4px;margin-bottom:8px;letter-spacing:.04em;}
+  .spacer{height:22px;display:block;}
+  .item-controls{display:flex;gap:6px;margin-top:8px;}
+  .qty-btn{width:36px;height:36px;border:1px solid rgba(255,255,255,.2);border-radius:8px;background:rgba(255,255,255,.08);cursor:pointer;font-size:20px;color:#fff;transition:background .1s;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .qty-btn:active{background:rgba(255,255,255,.25);}
+  .add-row{display:flex;gap:6px;margin-top:8px;}
+  .add-input{flex:1;min-width:0;padding:8px 6px;font-family:'DM Mono',monospace;font-size:14px;text-align:center;border:1px solid rgba(255,255,255,.15);border-radius:8px;background:rgba(255,255,255,.06);color:#fff;}
+  .add-input::placeholder{color:rgba(255,255,255,.25);font-size:10px;}
+  .add-btn{padding:8px 10px;background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;white-space:nowrap;flex-shrink:0;}
+  .add-btn:active{background:rgba(255,255,255,.3);}
+
+  .checkin-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:28px;}
+  @media(min-width:900px){.checkin-box,.log-box,.note-box{max-width:1000px;margin-left:auto;margin-right:auto;margin-bottom:28px;}}
+  .checkin-header h3{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#555;margin-bottom:14px;}
+  .checkin-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
   .checkin-lbl{font-size:14px;font-weight:500;color:#fff;}
-  .num-input{width:72px;padding:8px 10px;font-family:'DM Mono',monospace;font-size:20px;font-weight:500;text-align:center;border:1px solid var(--border);border-radius:8px;background:var(--bg3);color:#fff;}
-  .calc-btn{padding:9px 24px;border:1px solid #fff;border-radius:8px;background:#fff;color:#000;cursor:pointer;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;transition:opacity .15s;}
-  .calc-btn:hover{opacity:.85;}
-  .divider{border:none;border-top:1px solid var(--border);margin:22px 0;}
-  .rec-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#555;margin-bottom:14px;}
-  .rec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin-bottom:20px;}
-  .rec-item{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 14px;}
-  .rec-item-label{font-size:12px;color:#999;flex:1;}
-  .rec-input{width:52px;padding:5px 6px;font-family:'DM Mono',monospace;font-size:14px;font-weight:500;text-align:center;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:#fff;}
-  .preview{background:var(--bg2);border-radius:10px;padding:16px 18px;margin-bottom:16px;display:none;}
+  .num-input{width:68px;padding:8px 8px;font-family:'DM Mono',monospace;font-size:20px;font-weight:500;text-align:center;border:1px solid var(--border);border-radius:8px;background:var(--bg3);color:#fff;}
+  .calc-btn{padding:10px 20px;border:1px solid #fff;border-radius:8px;background:#fff;color:#000;cursor:pointer;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;}
+  .divider{border:none;border-top:1px solid var(--border);margin:18px 0;}
+  .rec-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#555;margin-bottom:12px;}
+  .rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;}
+  @media(min-width:500px){.rec-grid{grid-template-columns:repeat(3,1fr);}}
+  .rec-item{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px 11px;}
+  .rec-item-label{font-size:11px;color:#999;flex:1;line-height:1.3;}
+  .rec-input{width:46px;padding:5px 4px;font-family:'DM Mono',monospace;font-size:14px;font-weight:500;text-align:center;border:1px solid var(--border);border-radius:6px;background:var(--bg2);color:#fff;}
+  .preview{background:var(--bg2);border-radius:10px;padding:14px 16px;margin-bottom:14px;display:none;}
   .preview.show{display:block;}
-  .preview-info{font-size:12px;color:#999;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);}
-  .preview-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #1a1a1a;font-size:13px;}
+  .preview-info{font-size:12px;color:#999;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+  .preview-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #1a1a1a;font-size:12px;gap:8px;}
   .preview-row:last-child{border-bottom:none;}
-  .preview-row .lbl{color:#999;}
-  .preview-row .val{font-family:'DM Mono',monospace;font-weight:500;color:#fff;}
-  .rec-note{color:#4ade80;font-size:11px;margin:0 5px;}
-  .warn-note{color:#f87171;font-size:11px;margin-left:5px;}
-  .confirm-btn{margin-top:16px;padding:11px 28px;background:#fff;color:#000;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;font-family:'DM Sans',sans-serif;transition:opacity .15s;}
-  .confirm-btn:hover{opacity:.85;}
-  .log-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;}
-  .log-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .preview-row .lbl{color:#999;flex:1;}
+  .preview-row .val{font-family:'DM Mono',monospace;font-weight:500;color:#fff;text-align:right;font-size:11px;}
+  .rec-note{color:#4ade80;font-size:10px;margin:0 3px;}
+  .warn-note{color:#f87171;font-size:10px;margin-left:3px;}
+  .confirm-btn{margin-top:14px;width:100%;padding:13px;background:#fff;color:#000;border:none;border-radius:10px;cursor:pointer;font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;}
+
+  /* NOTE BOX */
+  .note-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:28px;}
+  .note-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+  .note-header h3{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#555;}
+  .note-input-row{display:flex;gap:8px;margin-bottom:14px;}
+  .note-text-input{flex:1;padding:10px 12px;font-family:'DM Sans',sans-serif;font-size:14px;border:1px solid var(--border);border-radius:8px;background:var(--bg3);color:#fff;resize:none;}
+  .note-text-input::placeholder{color:#555;}
+  .note-add-btn{padding:10px 14px;background:#fff;color:#000;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:700;white-space:nowrap;flex-shrink:0;align-self:flex-end;}
+  .note-add-btn:active{opacity:.8;}
+  .note-list{display:flex;flex-direction:column;gap:8px;}
+  .note-item{display:flex;align-items:flex-start;gap:10px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px 12px;}
+  .note-item.done{opacity:.45;}
+  .note-item.done .note-item-text{text-decoration:line-through;}
+  .note-item-text{flex:1;font-size:13px;color:var(--text2);line-height:1.4;word-break:break-word;}
+  .note-item-ts{font-family:'DM Mono',monospace;font-size:10px;color:#555;white-space:nowrap;margin-top:2px;}
+  .note-check{width:20px;height:20px;border:1px solid rgba(255,255,255,.2);border-radius:5px;background:transparent;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#4ade80;margin-top:1px;}
+  .note-check:active{background:rgba(255,255,255,.1);}
+  .note-del{width:24px;height:24px;border:none;background:transparent;cursor:pointer;color:#555;font-size:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:0px;}
+  .note-del:active{color:#f87171;}
+  .note-empty{font-size:13px;color:#555;}
+
+  .log-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:28px;}
+  .log-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
   .log-reset{font-size:12px;color:#555;cursor:pointer;text-decoration:underline;}
   .log-empty{font-size:13px;color:#555;}
-  .log-entry{padding:10px 0;border-bottom:1px solid var(--border);}
+  .log-entry{padding:9px 0;border-bottom:1px solid var(--border);}
   .log-entry:last-child{border-bottom:none;}
-  .log-ts{font-family:'DM Mono',monospace;font-size:11px;color:#555;margin-bottom:4px;}
-  .log-det{font-size:13px;color:#999;}
-  .log-rec{font-size:13px;color:#4ade80;}
-  .log-refill{font-size:13px;color:#60a5fa;}
+  .log-ts{font-family:'DM Mono',monospace;font-size:10px;color:#555;margin-bottom:3px;}
+  .log-det{font-size:12px;color:#999;}
+  .log-rec{font-size:12px;color:#4ade80;}
+  .log-refill{font-size:12px;color:#60a5fa;}
+
   .apt-panel{display:none;}
   .apt-panel.active{display:block;}
   .loading-overlay{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;z-index:999;transition:opacity .4s;}
   .loading-overlay.hidden{opacity:0;pointer-events:none;}
-  .loading-overlay img{height:90px;opacity:.7;}
+  .loading-overlay img{height:80px;opacity:.7;}
   .loading-overlay span{font-family:'DM Mono',monospace;font-size:12px;color:#555;}
 </style>
 </head>
@@ -104,23 +134,38 @@
   <div class="apt-panel active" id="panel-cozy">
     <div class="section-label">Inventario Armadio</div>
     <div class="inventory-grid" id="grid-cozy"></div>
+
     <div class="checkin-box">
       <div class="checkin-header">
         <h3>Check-in</h3>
-        <div class="checkin-top">
-          <span class="checkin-lbl">Numero ospiti</span>
-          <input type="number" class="num-input" id="persons-cozy" min="1" max="20" value="2" oninput="buildPreview('cozy')">
-          <button class="calc-btn" onclick="togglePreview('cozy')">Calcola consumo</button>
-        </div>
+      </div>
+      <div class="checkin-top">
+        <span class="checkin-lbl">Numero ospiti</span>
+        <input type="number" class="num-input" id="persons-cozy" min="1" max="20" value="2" oninput="buildPreview('cozy')">
+        <button class="calc-btn" onclick="togglePreview('cozy')">Calcola consumo</button>
       </div>
       <hr class="divider">
-      <div class="rec-label">&#8617; Biancheria recuperata &#8212; non verrà sottratta</div>
+      <div class="rec-label">&#8617; Biancheria recuperata — non verrà sottratta</div>
       <div class="rec-grid" id="recovery-cozy"></div>
       <div class="preview" id="preview-cozy">
         <div id="preview-rows-cozy"></div>
-        <button class="confirm-btn" onclick="applyCheckin('cozy')">&#10003; Conferma check-in</button>
+        <button class="confirm-btn" onclick="applyCheckin('cozy')">✓ Conferma check-in</button>
       </div>
     </div>
+
+    <div class="note-box">
+      <div class="note-header">
+        <h3>&#128203; Note &amp; Da fare</h3>
+      </div>
+      <div class="note-input-row">
+        <textarea class="note-text-input" id="note-input-cozy" rows="2" placeholder="Es: manca carta igienica, comprare detergente..."></textarea>
+        <button class="note-add-btn" onclick="addNote('cozy')">+ Aggiungi</button>
+      </div>
+      <div class="note-list" id="note-list-cozy">
+        <p class="note-empty">Nessuna nota.</p>
+      </div>
+    </div>
+
     <div class="log-box">
       <div class="log-header">
         <div class="section-label" style="margin:0">Registro movimenti</div>
@@ -133,23 +178,38 @@
   <div class="apt-panel" id="panel-residence">
     <div class="section-label">Inventario Armadio</div>
     <div class="inventory-grid" id="grid-residence"></div>
+
     <div class="checkin-box">
       <div class="checkin-header">
         <h3>Check-in</h3>
-        <div class="checkin-top">
-          <span class="checkin-lbl">Numero ospiti</span>
-          <input type="number" class="num-input" id="persons-residence" min="1" max="20" value="2" oninput="buildPreview('residence')">
-          <button class="calc-btn" onclick="togglePreview('residence')">Calcola consumo</button>
-        </div>
+      </div>
+      <div class="checkin-top">
+        <span class="checkin-lbl">Numero ospiti</span>
+        <input type="number" class="num-input" id="persons-residence" min="1" max="20" value="2" oninput="buildPreview('residence')">
+        <button class="calc-btn" onclick="togglePreview('residence')">Calcola consumo</button>
       </div>
       <hr class="divider">
-      <div class="rec-label">&#8617; Biancheria recuperata &#8212; non verrà sottratta</div>
+      <div class="rec-label">&#8617; Biancheria recuperata — non verrà sottratta</div>
       <div class="rec-grid" id="recovery-residence"></div>
       <div class="preview" id="preview-residence">
         <div id="preview-rows-residence"></div>
-        <button class="confirm-btn" onclick="applyCheckin('residence')">&#10003; Conferma check-in</button>
+        <button class="confirm-btn" onclick="applyCheckin('residence')">✓ Conferma check-in</button>
       </div>
     </div>
+
+    <div class="note-box">
+      <div class="note-header">
+        <h3>&#128203; Note &amp; Da fare</h3>
+      </div>
+      <div class="note-input-row">
+        <textarea class="note-text-input" id="note-input-residence" rows="2" placeholder="Es: manca carta igienica, comprare detergente..."></textarea>
+        <button class="note-add-btn" onclick="addNote('residence')">+ Aggiungi</button>
+      </div>
+      <div class="note-list" id="note-list-residence">
+        <p class="note-empty">Nessuna nota.</p>
+      </div>
+    </div>
+
     <div class="log-box">
       <div class="log-header">
         <div class="section-label" style="margin:0">Registro movimenti</div>
@@ -187,8 +247,8 @@ const ITEMS = [
 ];
 
 const DEFAULTS = {
-  cozy:      { lenzuola_matrimoniali:0, lenzuola_singole:0, federe:0, teli_grandi:0, teli_medi:0, teli_piccoli:0, log:[] },
-  residence: { lenzuola_matrimoniali:12, lenzuola_singole:7, federe:21, teli_grandi:16, teli_medi:16, teli_piccoli:16, log:[] }
+  cozy:      { lenzuola_matrimoniali:0, lenzuola_singole:0, federe:0, teli_grandi:0, teli_medi:0, teli_piccoli:0, log:[], notes:[] },
+  residence: { lenzuola_matrimoniali:12, lenzuola_singole:7, federe:21, teli_grandi:16, teli_medi:16, teli_piccoli:16, log:[], notes:[] }
 };
 
 let state = { cozy: JSON.parse(JSON.stringify(DEFAULTS.cozy)), residence: JSON.parse(JSON.stringify(DEFAULTS.residence)) };
@@ -213,10 +273,11 @@ async function saveApt(apt) {
     if(data) {
       ITEMS.forEach(item => { if(data[item.key]===undefined) data[item.key]=0; });
       if(!data.log) data.log=[];
+      if(!data.notes) data.notes=[];
       state[apt]=data;
     } else if(!initialized[apt]) { saveApt(apt); }
     initialized[apt]=true;
-    renderGrid(apt); renderLog(apt);
+    renderGrid(apt); renderLog(apt); renderNotes(apt);
     if(initialized.cozy&&initialized.residence) document.getElementById('loading').classList.add('hidden');
   });
 });
@@ -263,6 +324,21 @@ function renderRecovery(apt) {
   });
 }
 
+function renderNotes(apt) {
+  const el=document.getElementById('note-list-'+apt);
+  const notes=state[apt].notes||[];
+  if(!notes.length){ el.innerHTML='<p class="note-empty">Nessuna nota.</p>'; return; }
+  el.innerHTML=notes.map((n,i)=>`
+    <div class="note-item${n.done?' done':''}">
+      <button class="note-check" onclick="window.toggleNote('${apt}',${i})" title="Segna come fatto">${n.done?'✓':''}</button>
+      <div style="flex:1">
+        <div class="note-item-text">${n.text}</div>
+        <div class="note-item-ts">${n.ts}</div>
+      </div>
+      <button class="note-del" onclick="window.deleteNote('${apt}',${i})" title="Elimina">×</button>
+    </div>`).join('');
+}
+
 function renderLog(apt) {
   const el=document.getElementById('log-'+apt);
   const log=state[apt].log;
@@ -291,6 +367,26 @@ window.addQty=function(apt,key){
   state[apt].log.unshift({ts,persons:0,details:[],recovery:[],refill:`${item.label}: +${n} (totale: ${state[apt][key]})`});
   el.value=''; renderGrid(apt); renderLog(apt);
   if(previewOpen[apt]) window.buildPreview(apt); saveApt(apt);
+};
+
+window.addNote=function(apt){
+  const el=document.getElementById('note-input-'+apt);
+  const text=el.value.trim(); if(!text) return;
+  const now=new Date();
+  const ts=now.toLocaleDateString('it-IT')+' '+now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+  if(!state[apt].notes) state[apt].notes=[];
+  state[apt].notes.unshift({text, ts, done:false});
+  el.value=''; renderNotes(apt); saveApt(apt);
+};
+
+window.toggleNote=function(apt,i){
+  state[apt].notes[i].done=!state[apt].notes[i].done;
+  renderNotes(apt); saveApt(apt);
+};
+
+window.deleteNote=function(apt,i){
+  state[apt].notes.splice(i,1);
+  renderNotes(apt); saveApt(apt);
 };
 
 window.switchApt=function(apt){
